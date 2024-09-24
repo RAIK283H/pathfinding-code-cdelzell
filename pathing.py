@@ -19,7 +19,11 @@ def get_test_path():
 ##if it has hit the target and is at the end node, it can exit
 ##otherwise, it will keep generating nodes to visit
 def get_random_path():
-    # assert precondition
+
+    # assert preconditions
+    assert graph_data.graph_data is not None, "There is no graph data."
+    assert global_game_data.current_graph_index is not None, "There is no graph index chosen."
+    assert graph_data.graph_data[global_game_data.current_graph_index] is not None, "There is no graph chosen."
 
     graph = graph_data.graph_data[global_game_data.current_graph_index]
     start_node = graph[0]
