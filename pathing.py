@@ -16,20 +16,17 @@ def get_test_path():
 
 
 def get_random_path():
-    return create_random_path()[0]
-
-def create_random_path() :
     ##goes to random nodes
     ##keeps track of if it has hit the target
     ##if it has hit the target and is at the end node, it can exit
-    ##otherwise, it will just keep going
+    ##otherwise, it will keep generating nodes to visit
+
     graph = graph_data.graph_data[global_game_data.current_graph_index]
     start_node = graph[0]
     target = global_game_data.target_node[global_game_data.current_graph_index]
     target_reached = False
     end_node = graph[len(graph) - 1]
     current_node = start_node
-    count_to_reach_target = 0
     path = [0]
 
 
@@ -38,15 +35,19 @@ def create_random_path() :
         random_choice = random.choice(options)
         path.append(int(random_choice))
         current_node = graph[path[len(path) - 1]]
-        count_to_reach_target += 1
 
         if(random_choice == target) :
             target_reached = True
             print(target_reached is True and current_node == end_node)
-        if(target_reached is True and current_node == end_node) :
-            return path, count_to_reach_target
-    
-    return []
+        
+
+    ## test necessary post-conditions
+    assert target in path, "This path does not contain the necessary target"
+    assert path is not None, "This path does not contain any nodes"
+    assert path[0] == 0, "This path does not start at the correct node"
+    assert path[len(path) - 1] == len(graph) - 1, "This path does not end at the correct node"
+
+    return path
 
 
 
