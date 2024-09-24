@@ -4,11 +4,16 @@ import colors
 import config_data
 import global_game_data
 import graph_data
+
+
 class Scoreboard:
+
     player_name_display = []
     player_traveled_display = []
     player_excess_distance_display = []
     player_path_display = []
+    player_count_to_target_display = []
+
     def __init__(self, batch, group):
         self.batch = batch
         self.group = group
@@ -48,6 +53,15 @@ class Scoreboard:
                                    font_size=self.font_size, batch=batch, group=group, color=player[2][colors.TEXT_INDEX])
             self.player_path_display.append(
                 (path_label, player))
+            target_count_label = pyglet.text.Label("Edges to Target: ",
+                                   x=0,
+                                   y=0,
+                                   font_name='Arial',
+                                   font_size=self.font_size, batch=batch, group=group, color=player[2][colors.TEXT_INDEX])
+            self.player_count_to_target_display.append(
+                (target_count_label, player))
+            
+
     def update_elements_locations(self):
         self.distance_to_exit_label.x = config_data.window_width - self.stat_width
         self.distance_to_exit_label.y = config_data.window_height - self.stat_height;
@@ -63,9 +77,16 @@ class Scoreboard:
         for index, (display_element, player) in enumerate(self.player_path_display):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 5 - self.stat_height * (index * self.number_of_stats)
+        for index, (display_element, player) in enumerate(self.player_count_to_target_display):
+            display_element.x = config_data.window_width - self.stat_width
+            display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 6 - self.stat_height * (index * self.number_of_stats)
+    
+    
     def update_paths(self):
         for index in range(len(config_data.player_data)):
             self.player_path_display[index][0].text = self.wrap_text(str(global_game_data.graph_paths[index]))
+    
+    
     def update_distance_to_exit(self):
         start_x = graph_data.graph_data[global_game_data.current_graph_index][0][0][0]
         start_y = graph_data.graph_data[global_game_data.current_graph_index][0][0][1]
@@ -73,9 +94,13 @@ class Scoreboard:
         end_y = graph_data.graph_data[global_game_data.current_graph_index][-1][0][1]
         self.distance_to_exit = math.sqrt(pow(start_x - end_x, 2) + pow(start_y - end_y, 2))
         self.distance_to_exit_label.text = 'Direct Distance To Exit : ' + "{0:.0f}".format(self.distance_to_exit)
+    
+    
     def wrap_text(self, input):
         wrapped_text = (input[:44] + ', ...]') if len(input) > 44 else input
         return wrapped_text
+    
+    
     def update_distance_traveled(self):
         for display_element, player_configuration_info in self.player_traveled_display:
             for player_object in global_game_data.player_objects:
@@ -85,8 +110,38 @@ class Scoreboard:
             for player_object in global_game_data.player_objects:
                 if player_object.player_config_data == player_configuration_info:
                     display_element.text = "Excess Distance Traveled: " + str(max(0, int(player_object.distance_traveled-self.distance_to_exit)))
+    
+    
+    def update_trips_to_target(self):
+        
+        ## establish target node
+        target = global_game_data.target_node[global_game_data.current_graph_index]
+
+        ##loop through all players, set a new vertex counter each iteration
+        for index in range(len(config_data.player_data)):
+            counter = 0
+            path = global_game_data.graph_paths[index]
+            targetPassed = False
+
+            ##for every vertex in the path, check if a) it is the target or b) it is not 
+            ##and the target has not been reached yet (ie it is visited before the target)
+            for vertex in path:
+                if(vertex == target):
+                    targetPassed = True
+                if(vertex != target and not targetPassed):
+                   counter += 1
+            
+            ##add information to the player's display
+            ##if target was not reached, display that information
+            if(targetPassed):
+                self.player_count_to_target_display[index][0].text = "Vertices visited before target: " + str(counter)
+            else:
+                self.player_count_to_target_display[index][0].text = "Target was not reached."
+
+    
     def update_scoreboard(self):
         self.update_elements_locations()
         self.update_paths()
         self.update_distance_to_exit()
         self.update_distance_traveled()
+        self.update_trips_to_target()
