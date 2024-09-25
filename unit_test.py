@@ -23,6 +23,9 @@ class TestPathFinding(unittest.TestCase):
         self.assertNotEqual(almost_pi, pi)
         self.assertAlmostEqual(first=almost_pi, second=pi, delta=1e-1)
 
+    def test_get_random_path():
+        
+
 
 if __name__ == '__main__':
     unittest.main()
