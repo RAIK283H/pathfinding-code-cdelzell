@@ -50,15 +50,14 @@ def get_random_path():
     assert path is not None, "This path does not contain any nodes"
     assert path[0] == 0, "This path does not start at the correct node"
     assert path[len(path) - 1] == len(graph) - 1, "This path does not end at the correct node"
-    assert check_adjacent_nodes(path), "This path is not a connected path"
+    assert check_adjacent_nodes(path, graph), "This path is not a connected path"
 
 
     return path
 
 ## ensure that a path is made of sequential nodes all connected by edges
 # (i.e there are no breaks in the path)
-def check_adjacent_nodes(path):
-    graph = graph_data.graph_data[global_game_data.current_graph_index]
+def check_adjacent_nodes(path, graph):
 
     for i in range(0, len(path) - 2):
         node_info = graph[path[i]]
