@@ -42,7 +42,6 @@ def get_random_path():
 
         if(random_choice == target) :
             target_reached = True
-            print(target_reached is True and current_node == end_node)
         
 
     ## test necessary post-conditions
