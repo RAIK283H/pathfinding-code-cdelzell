@@ -66,7 +66,56 @@ def check_adjacent_nodes(path, graph):
     return True
 
 def get_dfs_path():
-    return [1,2]
+    # assert preconditions
+    assert graph_data.graph_data is not None, "There is no graph data."
+    assert global_game_data.current_graph_index is not None, "There is no graph index chosen."
+    assert graph_data.graph_data[global_game_data.current_graph_index] is not None, "There is no graph chosen."
+
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    start_node = 0
+    end_node = len(graph) - 1
+
+    path = dfs_path_creation(graph, start_node, target)
+    path.pop()
+    path.extend(dfs_path_creation(graph, target, end_node))
+
+    return path
+
+def dfs_path_creation(graph, start, target):
+    targetReached = False
+    visited = [False] * len(graph)
+    stack = []
+    path = []
+
+    visited[start] = True
+
+    stack.append(start)
+    print(stack)
+
+    while ((not len(stack) == 0) or (not targetReached)):
+        node = stack.pop()
+        adjList = graph[node][1]
+        nodesAdjacent = [False] * len(adjList)
+        for i in adjList:
+            if(visited[i] == False):
+                stack.append(node)
+                visited[i] =True
+                stack.append(i)
+                if(i == target):
+                    targetReached = True
+                    path.extend(stack)
+                    print("stack/path")
+                    print(stack)
+                    print(path)
+                break
+
+    print(path)
+
+    return path
+
+                
+
 
 
 def get_bfs_path():
