@@ -114,7 +114,22 @@ def dfs_path_creation(graph, start, target):
 
 
 def get_bfs_path():
-    return [1,2]
+
+# assert preconditions
+    assert graph_data.graph_data is not None, "There is no graph data."
+    assert global_game_data.current_graph_index is not None, "There is no graph index chosen."
+    assert graph_data.graph_data[global_game_data.current_graph_index] is not None, "There is no graph chosen."
+
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    start_node = 0
+    end_node = len(graph) - 1
+
+    path = bfs_path_creation(graph, start_node, target)
+    path.pop()
+    path.extend(bfs_path_creation(graph, target, end_node))
+
+    return path
 
 def bfs_path_creation(graph, start, target):
     targetReached = False
@@ -130,28 +145,47 @@ def bfs_path_creation(graph, start, target):
 
     while ((not len(queue) == 0) or (not targetReached)):
         node = queue.pop(0)
+        print("starting node")
+        print(node)
         adjList = graph[node][1]
         nodesAdjacent = [False] * len(adjList)
         for i in adjList:
             if(visited[i] == False):
                 visited[i] = True
+                print("node:")
+                print(i)
+                print("parent")
+                print(node)
                 parent[i] = node
                 queue.append(i)
                 if(i == target):
                     targetReached = True
-                    path.extend(get_parents(path, parent, node))
-                break
-
+                    print("start")
+                    print(start)
+                    print("node")
+                    print(i)
+                    get_parents(path, parent, start, i)
+                    print("the path we return to method")
+                    print(path)
+                    break
+                
+    print("final path: ", end="")
+    print(path.reverse())
     return path
 
-def get_parents(path, parents, node):
-    if(parents[node] == -1):
+def get_parents(path, parents, start, node):
+    print("dino")
+    if(node == start):
+        print("escape!")
         return path.append(node)
     else:
         path.append(node)
-        get_parents(parents, parents[node])
-    
-    
+        print("the path")
+        print(path)
+        get_parents(path, parents, start, parents[node])
+
+    print("the path we return")
+    print(path)
     return path
 
 def get_dijkstra_path():
