@@ -1,6 +1,7 @@
 import graph_data
 import global_game_data
 from numpy import random
+from collections import deque
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
@@ -91,7 +92,6 @@ def dfs_path_creation(graph, start, target):
     visited[start] = True
 
     stack.append(start)
-    print(stack)
 
     while ((not len(stack) == 0) or (not targetReached)):
         node = stack.pop()
@@ -105,12 +105,7 @@ def dfs_path_creation(graph, start, target):
                 if(i == target):
                     targetReached = True
                     path.extend(stack)
-                    print("stack/path")
-                    print(stack)
-                    print(path)
                 break
-
-    print(path)
 
     return path
 
@@ -121,6 +116,43 @@ def dfs_path_creation(graph, start, target):
 def get_bfs_path():
     return [1,2]
 
+def bfs_path_creation(graph, start, target):
+    targetReached = False
+    visited = [False] * len(graph)
+    parent = [0] * len(graph)
+    parent[0] = -1
+    queue = []
+    path = []
+
+    visited[start] = True
+
+    queue.append(start)
+
+    while ((not len(queue) == 0) or (not targetReached)):
+        node = queue.pop(0)
+        adjList = graph[node][1]
+        nodesAdjacent = [False] * len(adjList)
+        for i in adjList:
+            if(visited[i] == False):
+                visited[i] = True
+                parent[i] = node
+                queue.append(i)
+                if(i == target):
+                    targetReached = True
+                    path.extend(get_parents(path, parent, node))
+                break
+
+    return path
+
+def get_parents(path, parents, node):
+    if(parents[node] == -1):
+        return path.append(node)
+    else:
+        path.append(node)
+        get_parents(parents, parents[node])
+    
+    
+    return path
 
 def get_dijkstra_path():
     return [1,2]
