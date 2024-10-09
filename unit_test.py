@@ -152,7 +152,7 @@ class TestPathFinding(unittest.TestCase):
         [(150, 10), [5]]
         ]
 
-        expectedPath = []
+        expectedPath = [8]
         resultPath = pathing.dfs_path_creation(graph, 8, 8)
 
         self.assertTrue(expectedPath == resultPath)
@@ -173,6 +173,87 @@ class TestPathFinding(unittest.TestCase):
 
         expectedPath = [0, 1, 14, 7, 8, 5, 2, 3, 6, 9, 15]
         resultPath = pathing.get_dfs_path()
+
+        self.assertTrue(expectedPath == resultPath, resultPath)
+
+
+    def test_bfs_path_creation_happy_path(self):
+        graph = [
+        [(45, 45), [1]],
+        [(100, 245), [0, 2, 4]],
+        [(200, 245), [1, 3, 5]],
+        [(300, 145), [2, 6]],
+        [(100, 345), [1, 5, 7]],
+        [(200, 345), [2, 4, 6, 8]],
+        [(300, 345), [3, 9]],
+        [(100, 545), [4, 8]],
+        [(200, 445), [5, 7, 9]],
+        [(300, 445), [6, 8, 10]],
+        [(1200, 700), [9]]
+        ]
+
+        expectedPath = [0, 1, 2]
+        resultPath = pathing.bfs_path_creation(graph, 0, 2)
+
+        self.assertTrue(expectedPath == resultPath)
+
+    def test_bfs_path_creation_non_origin_start_node(self):
+        graph = [
+        [(0, 0), [1, 3]],
+        [(30, 40), [0, 2]],
+        [(70, 80), [1, 4, 5]],
+        [(10, 100), [0]], 
+        [(150, 200), [2, 5, 8]],
+        [(120, 50), [2, 4, 6, 10]], 
+        [(100, 150), [5, 7, 9]], 
+        [(200, 40), [6, 9]], 
+        [(125, 125), [4]], 
+        [(200, 100), [6, 7]],
+        [(150, 10), [5]]
+        ]
+
+        expectedPath = [8, 4, 5, 10]
+        resultPath = pathing.bfs_path_creation(graph, 8, 10)
+        print(resultPath)
+
+        self.assertTrue(expectedPath == resultPath)
+
+    def test_bfs_path_creation_same_start_and_target(self):
+        graph = [
+        [(0, 0), [1, 3]],
+        [(30, 40), [0, 2]],
+        [(70, 80), [1, 4, 5]],
+        [(10, 100), [0]], 
+        [(150, 200), [2, 5, 8]],
+        [(120, 50), [2, 4, 6, 10]], 
+        [(100, 150), [5, 7, 9]], 
+        [(200, 40), [6, 9]], 
+        [(125, 125), [4]], 
+        [(200, 100), [6, 7]],
+        [(150, 10), [5]]
+        ]
+
+        expectedPath = [8]
+        resultPath = pathing.bfs_path_creation(graph, 8, 8)
+
+        self.assertTrue(expectedPath == resultPath)
+
+    def test_get_bfs_path_happy_path(self):
+        global_game_data.current_graph_index = 6
+        global_game_data.target_node = [0, 0, 0, 0, 0, 0, 7]
+
+        expectedPath = [0, 1, 2, 5, 6, 7, 6, 5, 10]
+        resultPath = pathing.get_bfs_path()
+
+        self.assertTrue(expectedPath == resultPath, resultPath)
+
+    def test_get_bfs_path_happy_path_two(self):
+        global_game_data.current_graph_index = 2
+        global_game_data.target_node = [0, 0, 5]
+
+
+        expectedPath = [0, 21, 5, 21, 23]
+        resultPath = pathing.get_bfs_path()
 
         self.assertTrue(expectedPath == resultPath, resultPath)
 

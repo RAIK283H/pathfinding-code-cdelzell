@@ -102,7 +102,9 @@ def dfs_path_creation(graph, start, target):
     stack = []
     path = []
 
+    #if nodes are the same, return path with start node only
     if(start == target):
+        path.append(start)
         return path
 
     #set start node to visited and add to the stack
@@ -169,6 +171,11 @@ def bfs_path_creation(graph, start, target):
     parent[0] = -1
     queue = []
     path = []
+
+    #if nodes are the same, return path with start node only
+    if(start == target):
+        path.append(start)
+        return path
 
     #set start to visited and add to queue
     visited[start] = True
