@@ -77,22 +77,40 @@ def get_dfs_path():
     start_node = 0
     end_node = len(graph) - 1
 
+    #get path from start to target
     path = dfs_path_creation(graph, start_node, target)
+    #remove last node of path so no duplication
     path.pop()
+    #add path from target to end
     path.extend(dfs_path_creation(graph, target, end_node))
+
+    ## test necessary post-conditions
+    assert target in path, "This path does not contain the necessary target"
+    assert path is not None, "This path does not contain any nodes"
+    assert path[0] == 0, "This path does not start at the correct node"
+    assert path[len(path) - 1] == len(graph) - 1, "This path does not end at the correct node"
+    assert check_adjacent_nodes(path, graph), "This path is not a connected path"
 
     return path
 
+
+# get path from start to target node using depth-first-search
 def dfs_path_creation(graph, start, target):
+    #initialize variables
     targetReached = False
     visited = [False] * len(graph)
     stack = []
     path = []
 
-    visited[start] = True
+    if(start == target):
+        return path
 
+    #set start node to visited and add to the stack
+    visited[start] = True
     stack.append(start)
 
+    #while the stack is not empty or the target not reached, pop the node and add its neighbors to the stack
+    #if target is found, add the stack to the path and return
     while ((not len(stack) == 0) or (not targetReached)):
         node = stack.pop()
         adjList = graph[node][1]
@@ -115,7 +133,7 @@ def dfs_path_creation(graph, start, target):
 
 def get_bfs_path():
 
-# assert preconditions
+    # assert preconditions
     assert graph_data.graph_data is not None, "There is no graph data."
     assert global_game_data.current_graph_index is not None, "There is no graph index chosen."
     assert graph_data.graph_data[global_game_data.current_graph_index] is not None, "There is no graph chosen."
@@ -125,13 +143,26 @@ def get_bfs_path():
     start_node = 0
     end_node = len(graph) - 1
 
+    #get path from start to target
     path = bfs_path_creation(graph, start_node, target)
+    #remove end node so no duplication in the path
     path.pop()
+    #get path from target to end
     path.extend(bfs_path_creation(graph, target, end_node))
+
+    ## test necessary post-conditions
+    assert target in path, "This path does not contain the necessary target"
+    assert path is not None, "This path does not contain any nodes"
+    assert path[0] == 0, "This path does not start at the correct node"
+    assert path[len(path) - 1] == len(graph) - 1, "This path does not end at the correct node"
+    assert check_adjacent_nodes(path, graph), "This path is not a connected path"
 
     return path
 
+
+# get path from start to target node using depth-first-search
 def bfs_path_creation(graph, start, target):
+    #initialize variables
     targetReached = False
     visited = [False] * len(graph)
     parent = [0] * len(graph)
@@ -139,10 +170,12 @@ def bfs_path_creation(graph, start, target):
     queue = []
     path = []
 
+    #set start to visited and add to queue
     visited[start] = True
-
     queue.append(start)
 
+    #while the queue is not empty or the target not reached, pop the node and add its neighbors to the queue
+    #if target is found, recursivley get the path with the helper function, reverse it, and return
     while ((not len(queue) == 0) or (not targetReached)):
         node = queue.pop(0)
         adjList = graph[node][1]
@@ -157,14 +190,23 @@ def bfs_path_creation(graph, start, target):
                     get_parents(path, parent, start, i)
                     break
                 
-    
+    #reverse path and return
     path.reverse()
     return path
 
+
+#Get the path of the node to the start node by identifying the parents
+#returns path of nodes with the first node being the child node index and the final
+#node in the list being the start node index
+#   path -> the path to add nodes to
+#   parents -> the parent for each node, stored as a list
+#   start -> the start node index of the path we are tracing back
+#   node -> the end node index of the path we are tracing back
 def get_parents(path, parents, start, node):
+    #base case, if at start node append start node
     if(node == start):
         return path.append(node)
-    else:
+    else: #else append the node and pass in its parent to the function again
         path.append(node)
         get_parents(path, parents, start, parents[node])
 
