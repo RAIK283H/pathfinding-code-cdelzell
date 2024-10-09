@@ -13,6 +13,7 @@ class Scoreboard:
     player_excess_distance_display = []
     player_path_display = []
     player_count_to_target_display = []
+    winning_path_length = 1000000
 
     def __init__(self, batch, group):
         self.batch = batch
@@ -25,6 +26,8 @@ class Scoreboard:
         self.distance_to_exit_label = pyglet.text.Label('Direct Distance To Exit : 0', x=0, y=0,
                                                         font_name='Arial', font_size=self.font_size, batch=batch, group=group)
         self.distance_to_exit = 0
+        self.winner_label = pyglet.text.Label('Winner : ', x=0, y=0,
+                                                        font_name='Arial', font_size=self.font_size, batch=batch, group=group, color=(119, 212, 126))
         for index, player in enumerate(config_data.player_data):
             player_name_label = pyglet.text.Label(str(index + 1) + " " + player[0],
                                                   x=0,
@@ -64,7 +67,9 @@ class Scoreboard:
 
     def update_elements_locations(self):
         self.distance_to_exit_label.x = config_data.window_width - self.stat_width
-        self.distance_to_exit_label.y = config_data.window_height - self.stat_height;
+        self.distance_to_exit_label.y = config_data.window_height - self.stat_height
+        self.winner_label.x = config_data.window_width - self.stat_width - 600
+        self.winner_label.y = config_data.window_height - self.stat_height
         for index, (display_element, player) in enumerate(self.player_name_display):
             display_element.x = config_data.window_width - self.stat_width
             display_element.y = config_data.window_height - self.base_height_offset - self.stat_height * 2 - self.stat_height * (index * self.number_of_stats)
@@ -95,6 +100,27 @@ class Scoreboard:
         self.distance_to_exit = math.sqrt(pow(start_x - end_x, 2) + pow(start_y - end_y, 2))
         self.distance_to_exit_label.text = 'Direct Distance To Exit : ' + "{0:.0f}".format(self.distance_to_exit)
     
+    def update_winner(self):
+        ## establish target node
+        target = global_game_data.target_node[global_game_data.current_graph_index]
+
+        ##loop through all players, set a new vertex counter each iteration
+        for index in range(len(config_data.player_data)):
+            path = global_game_data.graph_paths[index]
+            targetPassed = False
+
+            ##check if target is in the path
+            if(target in path):
+                targetPassed = True
+            
+            ##check if player is the winner
+            if(targetPassed and len(path) < Scoreboard.winning_path_length):
+                self.winner_label.text = "Winner: " + str(config_data.player_data[index][0]) + " with " + str(len(path)) + " nodes visited"
+                Scoreboard.winning_path_length = len(path)
+        
+        Scoreboard.winning_path_length = 1000000
+
+        return
     
     def wrap_text(self, input):
         wrapped_text = (input[:44] + ', ...]') if len(input) > 44 else input
@@ -145,3 +171,4 @@ class Scoreboard:
         self.update_distance_to_exit()
         self.update_distance_traveled()
         self.update_trips_to_target()
+        self.update_winner()
