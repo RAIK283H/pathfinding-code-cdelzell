@@ -113,11 +113,12 @@ class Scoreboard:
             if(target in path):
                 targetPassed = True
             
-            ##check if player is the winner
+            ##check if player is the winner and update label
             if(targetPassed and len(path) < Scoreboard.winning_path_length):
                 self.winner_label.text = "Winner: " + str(config_data.player_data[index][0]) + " with " + str(len(path)) + " nodes visited"
                 Scoreboard.winning_path_length = len(path)
         
+        #reset minimum path length for next graph
         Scoreboard.winning_path_length = 1000000
 
         return
