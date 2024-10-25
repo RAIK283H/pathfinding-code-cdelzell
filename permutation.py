@@ -1,3 +1,4 @@
+import pathing
 
 # get all the permutations of nodes in a graph
 def getPermutations(graph):
@@ -18,8 +19,6 @@ def getPermutations(graph):
         mobileNums[largestMobileIndex], mobileNums[swapIndex] = mobileNums[swapIndex], mobileNums[largestMobileIndex]
 
         reverseDirection(mobileNums[swapIndex], mobileNums)
-
-        print(mobileNums[largestMobileIndex])
 
         permutations.append(getOriginalNodeValuesofList(getPositiveValueOfList(mobileNums)))
     
@@ -95,10 +94,14 @@ def getOriginalNodeValuesofList(arr):
     return originalNodes
 
 
-
-
-# Initialize the first permutation with <1 <2 ... <n
-# while there exists a mobile integer
-#   find the largest mobile integer k
-#   swap k and the adjacent integer it is looking at
-#   reverse the direction of all integers larger than k
+def checkHamiltonian(graph):
+    permutations = getPermutations(graph)
+    validCycles = []
+    for path in permutations:
+        if(pathing.check_adjacent_nodes(path, graph)):
+            validCycles.append(path)
+    
+    if (validCycles == None) :
+        return False
+    
+    return validCycles

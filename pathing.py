@@ -59,9 +59,12 @@ def get_random_path():
 # (i.e there are no breaks in the path)
 def check_adjacent_nodes(path, graph):
 
-    for i in range(0, len(path) - 2):
+    for i in range(0, len(path) - 1):
         node_info = graph[path[i]]
-        if(not(path[i+1] in node_info[1])) :
+        if(i == len(path) - 1):
+            if(not(path[i-1] in node_info[1])):
+                return False
+        elif(not(path[i+1] in node_info[1])) :
             return False
     
     return True
