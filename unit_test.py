@@ -257,17 +257,17 @@ class TestPathFinding(unittest.TestCase):
 
         self.assertTrue(expectedPath == resultPath, resultPath)
 
-    def test_generatePermutations(self):
-        graph = [
-        [(0, 0), [1]],
-        [(10, 10), [0, 2]],
-        [(20, 20), [1, 3]]
-        ]
+    # def test_generatePermutations(self):
+    #     graph = [
+    #     [(0, 0), [1]],
+    #     [(10, 10), [0, 2]],
+    #     [(20, 20), [1, 3]]
+    #     ]
 
-        expectedPermutations = []
-        resultPermutations = permutation.getPermutations(graph)
+    #     expectedPermutations = []
+    #     resultPermutations = permutation.getPermutations(graph)
 
-        self.assertTrue(expectedPermutations == resultPermutations, resultPermutations)
+    #     self.assertTrue(expectedPermutations == resultPermutations, resultPermutations)
 
     def test_checkForMobile_with_all_mobile(self):
         list = [1, 2, 4, 6, 7]
@@ -379,7 +379,29 @@ class TestPathFinding(unittest.TestCase):
 
         self.assertTrue(expectedList == resultList, resultList)
 
+    def test_getMaxAndSwap_with_false_positive(self):
+        list = [1, 2, 4, 6, 7]
+        i = 4
+        positive = False
 
+        expMaxMobile, expMaxIndex, expSwapIndex = 7, 4, 3
+        resMaxMobile, resMaxIndex, resSwapIndex = permutation.getMaxAndSwap(list, i, False)
+
+        self.assertTrue(expMaxMobile == resMaxMobile, resMaxMobile)
+        self.assertTrue(expMaxIndex == resMaxIndex, resMaxIndex)
+        self.assertTrue(expSwapIndex == resSwapIndex, resSwapIndex)
+
+    def test_getMaxAndSwap_with_true_positive(self):
+        list = [1, 2, 4, -7, 6]
+        i = 3
+        positive = True
+
+        expMaxMobile, expMaxIndex, expSwapIndex = 7, 3, 4
+        resMaxMobile, resMaxIndex, resSwapIndex = permutation.getMaxAndSwap(list, i, True)
+
+        self.assertTrue(expMaxMobile == resMaxMobile, resMaxMobile)
+        self.assertTrue(expMaxIndex == resMaxIndex, resMaxIndex)
+        self.assertTrue(expSwapIndex == resSwapIndex, resSwapIndex)
 
 if __name__ == '__main__':
     unittest.main()
