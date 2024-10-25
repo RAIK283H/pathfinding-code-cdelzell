@@ -26,6 +26,8 @@ class TestPathFinding(unittest.TestCase):
         self.assertNotEqual(almost_pi, pi)
         self.assertAlmostEqual(first=almost_pi, second=pi, delta=1e-1)
 
+# Adjacenct Nodes unit tests
+
     def test_check_adjacent_nodes_happy_path(self):
         graph = [
         [(0, 0), [1, 4]],
@@ -97,6 +99,8 @@ class TestPathFinding(unittest.TestCase):
         path = [0, 2, 8, 2, 10, 20, 14]
 
         self.assertFalse(pathing.check_adjacent_nodes(path, graph))
+
+# DFS unit tests
 
     def test_dfs_path_creation_happy_path(self):
         graph = [
@@ -177,6 +181,7 @@ class TestPathFinding(unittest.TestCase):
 
         self.assertTrue(expectedPath == resultPath, resultPath)
 
+# BFS unit tests
 
     def test_bfs_path_creation_happy_path(self):
         graph = [
@@ -256,6 +261,8 @@ class TestPathFinding(unittest.TestCase):
         resultPath = pathing.get_bfs_path()
 
         self.assertTrue(expectedPath == resultPath, resultPath)
+
+# Permutations unit tests
 
     def test_generatePermutations_happy_path(self):
         graph = [
@@ -426,6 +433,19 @@ class TestPathFinding(unittest.TestCase):
         self.assertTrue(expMaxMobile == resMaxMobile, resMaxMobile)
         self.assertTrue(expMaxIndex == resMaxIndex, resMaxIndex)
         self.assertTrue(expSwapIndex == resSwapIndex, resSwapIndex)
+
+    def test_getHamiltonian_with_one_cycle(self):
+        graph = [
+        [(0, 0), [1]],
+        [(10, 10), [0, 2]],
+        [(20, 20), [1, 3]]
+        ]
+
+        expectedCycles = [[0, 1, 2], [2, 1, 0]]
+        resultCycles = permutation.getHamiltonian(graph)
+
+        self.assertTrue(expectedCycles == resultCycles, resultCycles)
+
 
 if __name__ == '__main__':
     unittest.main()

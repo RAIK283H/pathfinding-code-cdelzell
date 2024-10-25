@@ -93,8 +93,9 @@ def getOriginalNodeValuesofList(arr):
     
     return originalNodes
 
-
-def checkHamiltonian(graph):
+#Get all hamiltonian cycles in a graph
+#so this is actually checking for hamiltonian paths, not cycles, big difference!
+def getHamiltonian(graph):
     permutations = getPermutations(graph)
     validCycles = []
     for path in permutations:
@@ -105,3 +106,7 @@ def checkHamiltonian(graph):
         return False
     
     return validCycles
+
+# remove the 0 and len(graph) - 1 nodes from the list
+# check if every node (1 - (len(graph) - 1)) is visited
+# check if the last node has the first node in its adjacency list
