@@ -2,6 +2,7 @@ import math
 import unittest
 import pathing
 import global_game_data
+import permutation
 
 
 class TestPathFinding(unittest.TestCase):
@@ -214,7 +215,6 @@ class TestPathFinding(unittest.TestCase):
 
         expectedPath = [8, 4, 5, 10]
         resultPath = pathing.bfs_path_creation(graph, 8, 10)
-        print(resultPath)
 
         self.assertTrue(expectedPath == resultPath)
 
@@ -256,6 +256,128 @@ class TestPathFinding(unittest.TestCase):
         resultPath = pathing.get_bfs_path()
 
         self.assertTrue(expectedPath == resultPath, resultPath)
+
+    def test_generatePermutations(self):
+        graph = [
+        [(0, 0), [1]],
+        [(10, 10), [0, 2]],
+        [(20, 20), [1, 3]]
+        ]
+
+        expectedPermutations = []
+        resultPermutations = permutation.getPermutations(graph)
+
+        self.assertTrue(expectedPermutations == resultPermutations, resultPermutations)
+
+    def test_checkForMobile_with_all_mobile(self):
+        list = [1, 2, 4, 6, 7]
+
+        expected = True
+        result = permutation.checkForMobile(list)
+
+        self.assertTrue(expected == result, result)
+
+    def test_checkForMobile_with_some_mobile(self):
+        list = [1, 9, -4, 6, -3]
+
+        expected = True
+        result = permutation.checkForMobile(list)
+
+        self.assertTrue(expected == result, result)
+
+    def test_checkForMobile_with_one_mobile(self):
+        list = [-10, 9, 4, 3, 2]
+
+        expected = True
+        result = permutation.checkForMobile(list)
+
+        self.assertTrue(expected == result, result)
+    
+    def test_checkForMobile_with_no_mobile(self):
+        list = [10, 9, 4, 3, 2]
+
+        expected = False
+        result = permutation.checkForMobile(list)
+
+        self.assertTrue(expected == result, result)
+
+    def test_getLargestMobile_with_all_mobile_in_order(self):
+        list = [1, 2, 4, 6, 7]
+
+        expected1, expected2 = 4, 3
+        result1, result2 = permutation.getLargestMobile(list)
+
+        self.assertTrue(expected1 == result1, result1)
+        self.assertTrue(expected2 == result2, result2)
+
+    def test_getLargestMobile_with_some_mobile_mixed(self):
+        list = [1, 9, -4, 6, -3]
+
+        expected1, expected2 = 1, 0
+        result1, result2 = permutation.getLargestMobile(list)
+
+        self.assertTrue(expected1 == result1, result1)
+        self.assertTrue(expected2 == result2, result2)
+
+    def test_getLargestMobile_with_some_mobile_mixed_2(self):
+        list = [1, 9, -4, 11, -3]
+
+        expected1, expected2 = 3, 2
+        result1, result2 = permutation.getLargestMobile(list)
+
+        self.assertTrue(expected1 == result1, result1)
+        self.assertTrue(expected2 == result2, result2)
+
+    def test_getLargestMobile_with_negative_max_mobile(self):
+        list = [1, 9, -4, -11, -3]
+
+        expected1, expected2 = 3, 4
+        result1, result2 = permutation.getLargestMobile(list)
+
+        self.assertTrue(expected1 == result1, result1)
+        self.assertTrue(expected2 == result2, result2)
+
+    def test_reverseDirection_with_all_positive_numbers(self):
+        list = [1, 2, 4, 6, 7]
+        largest = 4
+
+        expectedList = [1, 2, 4, -6, -7]
+        resultList = permutation.reverseDirection(largest, list)
+
+        self.assertTrue(expectedList == resultList, resultList)
+
+    def test_reverseDirection_with_pos_and_neg_numbers(self):
+        list = [1, -2, 4, -6, 7]
+        largest = 2
+
+        expectedList = [1, -2, -4, 6, -7]
+        resultList = permutation.reverseDirection(largest, list)
+
+        self.assertTrue(expectedList == resultList, resultList)
+
+    def test_getPositiveValueOfList_with_all_positives(self):
+        list = [1, 2, 4, 6, 7]
+
+        expectedList = [1, 2, 4, 6, 7]
+        resultList = permutation.getPositiveValueOfList(list)
+
+        self.assertTrue(expectedList == resultList, resultList)
+
+    def test_getPositiveValueOfList_with_pos_and_neg_numbers(self):
+        list = [1, -2, 4, -6, 7]
+
+        expectedList = [1, 2, 4, 6, 7]
+        resultList = permutation.getPositiveValueOfList(list)
+
+        self.assertTrue(expectedList == resultList, resultList)
+
+    def test_getOriginalNodeValuesofList_happy_path(self):
+        list = [1, 2, 4, 6, 7]
+
+        expectedList = [0, 1, 3, 5, 6]
+        resultList = permutation.getOriginalNodeValuesofList(list)
+
+        self.assertTrue(expectedList == resultList, resultList)
 
 
 
