@@ -7,4 +7,4 @@ def displayHamiltonian(graphIndex):
     print("Valid Hamiltonian Cycles for Graph " + str(graphIndex) + ": ")
     print(smallGraphHamiltonianCycles)
     
-displayHamiltonian(3)
+displayHamiltonian(11)
