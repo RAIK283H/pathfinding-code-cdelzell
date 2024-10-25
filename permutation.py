@@ -108,5 +108,22 @@ def getHamiltonian(graph):
     return validCycles
 
 # remove the 0 and len(graph) - 1 nodes from the list
-# check if every node (1 - (len(graph) - 1)) is visited
+# check if it is a valid path
+# check if every node (1 - (len(graph) - 1)) is visited //actually this should be a given,\
+# no need to check if the permutation method is working correctly all nodes will be in each permutation
 # check if the last node has the first node in its adjacency list
+
+def findHamiltonian(graph):
+    permutations = getPermutations(graph)
+    validCycles = []
+    exitNode = len(graph)
+
+    for path in permutations:
+        path.remove(0)
+        path.remove(exitNode)
+
+        if(pathing.check_adjacent_nodes(path, graph) and graph(path(len(path)-1))):
+            validCycles.append(path)
+
+def checkIfInAdjacencyList(path, graph):
+    
