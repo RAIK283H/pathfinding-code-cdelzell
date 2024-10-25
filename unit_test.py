@@ -257,17 +257,17 @@ class TestPathFinding(unittest.TestCase):
 
         self.assertTrue(expectedPath == resultPath, resultPath)
 
-    # def test_generatePermutations(self):
-    #     graph = [
-    #     [(0, 0), [1]],
-    #     [(10, 10), [0, 2]],
-    #     [(20, 20), [1, 3]]
-    #     ]
+    def test_generatePermutations(self):
+        graph = [
+        [(0, 0), [1]],
+        [(10, 10), [0, 2]],
+        [(20, 20), [1, 3]]
+        ]
 
-    #     expectedPermutations = []
-    #     resultPermutations = permutation.getPermutations(graph)
+        expectedPermutations = []
+        resultPermutations = permutation.getPermutations(graph)
 
-    #     self.assertTrue(expectedPermutations == resultPermutations, resultPermutations)
+        self.assertTrue(expectedPermutations == resultPermutations, resultPermutations)
 
     def test_checkForMobile_with_all_mobile(self):
         list = [1, 2, 4, 6, 7]
@@ -342,6 +342,15 @@ class TestPathFinding(unittest.TestCase):
         largest = 4
 
         expectedList = [1, 2, 4, -6, -7]
+        resultList = permutation.reverseDirection(largest, list)
+
+        self.assertTrue(expectedList == resultList, resultList)
+
+    def test_reverseDirection_with_special_list(self):
+        list = [1, 2, 3]
+        largest = 3
+
+        expectedList = [1, 2, 3]
         resultList = permutation.reverseDirection(largest, list)
 
         self.assertTrue(expectedList == resultList, resultList)
