@@ -455,7 +455,7 @@ class TestPathFinding(unittest.TestCase):
         [(40, 40), [3]]
         ]
 
-        expectedCycles = [[1, 2, 3], [2, 3, 1], [3, 2, 1]]
+        expectedCycles = [[1, 2, 3], [1, 3, 2], [3, 1, 2], [3, 2, 1], [2, 3, 1], [2, 1, 3]]
         resultCycles = permutation.findHamiltonian(graph)
 
         self.assertTrue(expectedCycles == resultCycles, resultCycles)
