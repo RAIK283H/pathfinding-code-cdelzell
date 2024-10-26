@@ -290,7 +290,6 @@ class TestPathFinding(unittest.TestCase):
 
         self.assertTrue(expectedPermutations == resultPermutations, resultPermutations)
 
-
     def test_checkForMobile_with_all_mobile(self):
         list = [1, 2, 4, 6, 7]
 
@@ -456,6 +455,45 @@ class TestPathFinding(unittest.TestCase):
         ]
 
         expectedCycles = [[1, 2, 3], [1, 3, 2], [3, 1, 2], [3, 2, 1], [2, 3, 1], [2, 1, 3]]
+        resultCycles = permutation.findHamiltonian(graph)
+
+        self.assertTrue(expectedCycles == resultCycles, resultCycles)
+
+    def test_findHamiltonian_happypath2(self):
+        graph = [
+        [(10, 25), [1]],
+        [(50, 70), [0, 2, 8]],
+        [(100, 50), [1, 6, 3]],
+        [(100, 20), [2, 6, 5, 4]],
+        [(100, 10), [3, 5]],
+        [(120, 10), [3, 4, 6, 7]],
+        [(130, 70), [3, 5, 7, 2]],
+        [(160, 60), [5, 6, 8]],
+        [(190, 90), [7, 1, 9]],
+        [(160, 100), [8]],
+        ]
+
+        expectedCycles = [[1, 2, 3, 4, 5, 6, 7, 8], [8, 1, 2, 3, 4, 5, 6, 7], [7, 8, 1, 2, 3, 4, 5, 6], [7, 8, 1, 2, 6, 3, 4, 5], [8, 1, 2, 6, 3, 4, 5, 7], [1, 2, 6, 3, 4, 5, 7, 8], [6, 7, 8, 1, 2, 3, 4, 5], 
+                          [5, 7, 8, 1, 2, 6, 3, 4], [5, 6, 7, 8, 1, 2, 3, 4], [4, 5, 7, 8, 1, 2, 6, 3], [4, 5, 6, 7, 8, 1, 2, 3], [1, 8, 7, 5, 4, 3, 6, 2], [1, 8, 7, 6, 5, 4, 3, 2], [3, 4, 5, 7, 8, 1, 2, 6], 
+                          [3, 4, 5, 6, 7, 8, 1, 2], [6, 3, 4, 5, 7, 8, 1, 2], [4, 3, 2, 1, 8, 7, 6, 5], [4, 3, 6, 2, 1, 8, 7, 5], [5, 4, 3, 2, 1, 8, 7, 6], [5, 4, 3, 6, 2, 1, 8, 7], [7, 5, 4, 3, 6, 2, 1, 8], 
+                          [8, 7, 5, 4, 3, 6, 2, 1], [8, 7, 6, 5, 4, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 8], [6, 5, 4, 3, 2, 1, 8, 7], [3, 2, 1, 8, 7, 6, 5, 4], [3, 6, 2, 1, 8, 7, 5, 4], [2, 3, 4, 5, 6, 7, 8, 1], 
+                          [2, 6, 3, 4, 5, 7, 8, 1], [2, 1, 8, 7, 5, 4, 3, 6], [2, 1, 8, 7, 6, 5, 4, 3], [6, 2, 1, 8, 7, 5, 4, 3]]
+        resultCycles = permutation.findHamiltonian(graph)
+
+        self.assertTrue(expectedCycles == resultCycles, resultCycles)
+
+
+    def test_findHamiltonian_no_cycles(self):
+        graph = [
+        [(0, 0), [1, 2]],
+        [(10, 10), [0, 3]],
+        [(20, 20), [0, 4]],
+        [(30, 30), [1, 5]],
+        [(40, 40), [2, 5]],
+        [(50, 50), [3, 4]]
+        ]
+
+        expectedCycles = []
         resultCycles = permutation.findHamiltonian(graph)
 
         self.assertTrue(expectedCycles == resultCycles, resultCycles)
