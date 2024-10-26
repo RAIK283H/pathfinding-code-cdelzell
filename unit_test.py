@@ -434,18 +434,55 @@ class TestPathFinding(unittest.TestCase):
         self.assertTrue(expMaxIndex == resMaxIndex, resMaxIndex)
         self.assertTrue(expSwapIndex == resSwapIndex, resSwapIndex)
 
-    def test_getHamiltonian_with_one_cycle(self):
+    # def test_getHamiltonian_with_one_cycle(self):
+    #     graph = [
+    #     [(0, 0), [1]],
+    #     [(10, 10), [0, 2]],
+    #     [(20, 20), [1, 3]]
+    #     ]
+
+    #     expectedCycles = [[0, 1, 2], [2, 1, 0]]
+    #     resultCycles = permutation.getHamiltonian(graph)
+
+    #     self.assertTrue(expectedCycles == resultCycles, resultCycles)
+
+    def test_findHamiltonian_happypath(self):
         graph = [
         [(0, 0), [1]],
-        [(10, 10), [0, 2]],
-        [(20, 20), [1, 3]]
+        [(10, 10), [0, 2, 3]],
+        [(20, 20), [1, 3, 4]], 
+        [(30, 30), [1, 2, 4]],
+        [(40, 40), [3]]
         ]
 
-        expectedCycles = [[0, 1, 2], [2, 1, 0]]
-        resultCycles = permutation.getHamiltonian(graph)
+        expectedCycles = [[1, 2, 3], [2, 3, 1], [3, 2, 1]]
+        resultCycles = permutation.findHamiltonian(graph)
 
         self.assertTrue(expectedCycles == resultCycles, resultCycles)
 
+    def test_checkIfInAdjacencyList_happypath(self):
+        graph = [
+        [(0, 0), [1]],
+        [(10, 10), [0, 2]],
+        [(20, 20), [1]]
+        ]
+
+        expected = True
+        result = permutation.checkIfInAdjacencyList(1, 2, graph)
+
+        self.assertTrue(expected == result, result)
+
+    def test_checkIfInAdjacencyList_node_not_present(self):
+        graph = [
+        [(0, 0), [1]],
+        [(10, 10), [0, 2]],
+        [(20, 20), [1]]
+        ]
+
+        expected = False
+        result = permutation.checkIfInAdjacencyList(1, 3, graph)
+
+        self.assertTrue(expected == result, result)
 
 if __name__ == '__main__':
     unittest.main()

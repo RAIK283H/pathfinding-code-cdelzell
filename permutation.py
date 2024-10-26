@@ -115,15 +115,24 @@ def getHamiltonian(graph):
 
 def findHamiltonian(graph):
     permutations = getPermutations(graph)
+    print(permutations)
     validCycles = []
-    exitNode = len(graph)
+    exitNode = len(graph) - 1
 
     for path in permutations:
         path.remove(0)
         path.remove(exitNode)
 
-        if(pathing.check_adjacent_nodes(path, graph) and graph(path(len(path)-1))):
+        if(pathing.check_adjacent_nodes(path, graph) and checkIfInAdjacencyList(path[len(path)-1], path[0], graph)):
             validCycles.append(path)
 
-def checkIfInAdjacencyList(path, graph):
+    return validCycles
+
+def checkIfInAdjacencyList(nodeIndex, adjacentNodeIndex, graph):
+    node = graph[nodeIndex]
+
+    if(adjacentNodeIndex in node[1]):
+        return True
     
+    return False
+
