@@ -2,6 +2,7 @@ import graph_data
 import global_game_data
 from numpy import random
 from collections import deque
+import math
 
 def set_current_graph_paths():
     global_game_data.graph_paths.clear()
@@ -230,7 +231,6 @@ def get_dijkstra_path():
     assert graph_data.graph_data[global_game_data.current_graph_index] is not None, "There is no graph chosen."
 
     graph = graph_data.graph_data[global_game_data.current_graph_index]
-    target = global_game_data.target_node[global_game_data.current_graph_index]
 
     #initialize list of all nodes with distance of infinity (Essentially), no parent, and unsolved
     nodeInfo = initializeNodeInfo(graph)
@@ -239,23 +239,37 @@ def get_dijkstra_path():
     nodeInfo[0][1] = 0
 
     queue = []
-    queue.append(nodeInfo[1])
+    queue.append(nodeInfo[0])
 
     while len(queue) > 0 :
         vertex = highestPriority(queue)
-        nodeInfo[vertex[0][0]][3] = True
+        
+        nodeInfo[vertex[0]][3] = True
 
-        neighborNodes = graph[vertex[0][0]][1]
-        for 
+        neighborNodes = graph[vertex[0]][1]
 
-    return [1,2]
+        for neighbor in neighborNodes:
+            distance = nodeInfo[vertex[0]][1] + calculateDistance(graph[vertex[0]], graph[neighbor])
+            if nodeInfo[neighbor][3] is False and distance < nodeInfo[neighbor][1]:
+                nodeInfo[neighbor][1] = distance
+                nodeInfo[neighbor][2] = vertex[0]
+                queue.append(nodeInfo[neighbor])
+    
+    parents = []
+    
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    parents = getPathToNode(nodeInfo, parents, target, 0)
+    getPathToNode(nodeInfo, parents, len(graph) - 1, target)
+    parents.append(len(graph) - 1)
+
+    return parents
 
 #initialize list of nodes, including index, distance, parent, and unsolved status
 def initializeNodeInfo(graph):
     nodeInfo = []
 
     for i in range(len(graph)):
-        nodeInfo.append((i, 1000, None, False))
+        nodeInfo.append([i, 1000, None, False])
 
     return nodeInfo
 
@@ -265,13 +279,29 @@ def highestPriority(queue):
     minVertexIndex = -1
 
     for v in range(len(queue)):
-        if queue[v][0] < min :
-            min = queue[v][0]
+        if queue[v][1] < min :
+            min = queue[v][1]
             minVertexIndex = v
 
     vertex = queue[minVertexIndex]
     del queue[minVertexIndex]
 
-    return vertex, minVertexIndex
+    return vertex
 
+def calculateDistance(v1, v2):
+    x1 = v1[0][0]
+    y1 = v1[0][1]
 
+    x2 = v2[0][0]
+    y2 = v2[0][1]
+
+    return math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
+
+def getPathToNode(nodeInfo, parents, index, nodeIndex):
+    if nodeInfo[index][2] == nodeIndex:
+        parents.append(nodeIndex)
+    else:
+        parents.append(nodeInfo[index][2])
+        getPathToNode(nodeInfo, parents, nodeInfo[index][2], nodeIndex)
+
+    return parents
