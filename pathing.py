@@ -224,6 +224,11 @@ def get_parents(path, parents, start, node):
     return path
 
 def get_dijkstra_path():
+    # assert preconditions
+    assert graph_data.graph_data is not None, "There is no graph data."
+    assert global_game_data.current_graph_index is not None, "There is no graph index chosen."
+    assert graph_data.graph_data[global_game_data.current_graph_index] is not None, "There is no graph chosen."
+
     target = global_game_data.target_node[global_game_data.current_graph_index]
     pathToTarget = create_dijkstra_path(0, target)
  
@@ -235,14 +240,17 @@ def get_dijkstra_path():
 
     print(target, pathToTarget)
 
+    ## test necessary post-conditions
+    assert target in pathToTarget, "This path does not contain the necessary target"
+    assert pathToTarget is not None, "This path does not contain any nodes"
+    assert pathToTarget[0] == 0, "This path does not start at the correct node"
+    assert pathToTarget[len(pathToTarget) - 1] == len(graph) - 1, "This path does not end at the correct node"
+    assert check_adjacent_nodes(pathToTarget, graph), "This path is not a connected path"
+
+
     return pathToTarget
 
 def create_dijkstra_path(startNode, target):
-
-    # assert preconditions
-    assert graph_data.graph_data is not None, "There is no graph data."
-    assert global_game_data.current_graph_index is not None, "There is no graph index chosen."
-    assert graph_data.graph_data[global_game_data.current_graph_index] is not None, "There is no graph chosen."
 
     graph = graph_data.graph_data[global_game_data.current_graph_index]
 
@@ -272,13 +280,6 @@ def create_dijkstra_path(startNode, target):
     parents = []
 
     parents = getPathToNode(nodeInfo, parents, target, startNode)
-
-    ## test necessary post-conditions
-    assert target in parents, "This path does not contain the necessary target"
-    assert parents is not None, "This path does not contain any nodes"
-    assert parents[0] == 0, "This path does not start at the correct node"
-    assert parents[len(parents) - 1] == len(graph) - 1, "This path does not end at the correct node"
-    assert check_adjacent_nodes(parents, graph), "This path is not a connected path"
 
     return parents
 
