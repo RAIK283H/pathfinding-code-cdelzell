@@ -258,9 +258,8 @@ def get_dijkstra_path():
     parents = []
     
     target = global_game_data.target_node[global_game_data.current_graph_index]
-    parents = getPathToNode(nodeInfo, parents, target, 0)
-    getPathToNode(nodeInfo, parents, len(graph) - 1, target)
-    parents.append(len(graph) - 1)
+
+    parents = getFullPath(graph, target, nodeInfo, parents)
 
     return parents
 
@@ -297,11 +296,20 @@ def calculateDistance(v1, v2):
 
     return math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
 
-def getPathToNode(nodeInfo, parents, index, nodeIndex):
-    if nodeInfo[index][2] == nodeIndex:
-        parents.append(nodeIndex)
+def getPathToNode(nodeInfo, parents, startIndex, targetIndex):
+    if nodeInfo[startIndex][2] == targetIndex:
+        parents.append(targetIndex)
     else:
-        parents.append(nodeInfo[index][2])
-        getPathToNode(nodeInfo, parents, nodeInfo[index][2], nodeIndex)
+        getPathToNode(nodeInfo, parents, nodeInfo[startIndex][2], targetIndex)
+        parents.append(nodeInfo[startIndex][2])
+        
+
+    return parents
+
+def getFullPath(graph, target, nodeInfo, parents):
+
+    parents = getPathToNode(nodeInfo, parents, target, 0)
+    getPathToNode(nodeInfo, parents, len(graph) - 1, target)
+    parents.append(len(graph) - 1)
 
     return parents
