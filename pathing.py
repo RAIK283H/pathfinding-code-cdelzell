@@ -260,6 +260,8 @@ def create_dijkstra_path(startNode, target):
     #set start node distance to zero
     nodeInfo[startNode][1] = 0
 
+    print(nodeInfo)
+
     queue = []
     queue.append(nodeInfo[startNode])
 
@@ -279,6 +281,8 @@ def create_dijkstra_path(startNode, target):
     
     parents = []
 
+    print(nodeInfo)
+    
     parents = getPathToNode(nodeInfo, parents, target, startNode)
 
     return parents
@@ -317,9 +321,7 @@ def calculateDistance(v1, v2):
     return math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
 
 def getPathToNode(nodeInfo, parents, targetIndex, startIndex):
-    if targetIndex is None:
-        return
-    elif nodeInfo[targetIndex][2] == startIndex:
+    if nodeInfo[targetIndex][2] == startIndex:
         parents.append(startIndex)
     else:
         getPathToNode(nodeInfo, parents, nodeInfo[targetIndex][2], startIndex)
@@ -327,6 +329,12 @@ def getPathToNode(nodeInfo, parents, targetIndex, startIndex):
         
 
     return parents
+
+# if nodeInfo[targetIndex][2] == startIndex:
+#        ~~~~~~~~^^^^^^^^^^^^^
+# TypeError: list indices must be integers or slices, not NoneType
+# This is a common error I am getting, but there should never be a point
+# where you are looking for the parent of the start node, so i am confused
 
 def getFullPath(graph, target, nodeInfo, parents):
 
