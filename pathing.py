@@ -273,6 +273,13 @@ def create_dijkstra_path(startNode, target):
 
     parents = getPathToNode(nodeInfo, parents, target, startNode)
 
+    ## test necessary post-conditions
+    assert target in parents, "This path does not contain the necessary target"
+    assert parents is not None, "This path does not contain any nodes"
+    assert parents[0] == 0, "This path does not start at the correct node"
+    assert parents[len(parents) - 1] == len(graph) - 1, "This path does not end at the correct node"
+    assert check_adjacent_nodes(parents, graph), "This path is not a connected path"
+
     return parents
 
 #initialize list of nodes, including index, distance, parent, and unsolved status
