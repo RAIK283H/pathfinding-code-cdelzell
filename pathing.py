@@ -223,4 +223,55 @@ def get_parents(path, parents, start, node):
     return path
 
 def get_dijkstra_path():
+
+    # assert preconditions
+    assert graph_data.graph_data is not None, "There is no graph data."
+    assert global_game_data.current_graph_index is not None, "There is no graph index chosen."
+    assert graph_data.graph_data[global_game_data.current_graph_index] is not None, "There is no graph chosen."
+
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+
+    #initialize list of all nodes with distance of infinity (Essentially), no parent, and unsolved
+    nodeInfo = initializeNodeInfo(graph)
+
+    #set start node distance to zero
+    nodeInfo[0][1] = 0
+
+    queue = []
+    queue.append(nodeInfo[1])
+
+    while len(queue) > 0 :
+        vertex = highestPriority(queue)
+        nodeInfo[vertex[0][0]][3] = True
+
+        neighborNodes = graph[vertex[0][0]][1]
+        for 
+
     return [1,2]
+
+#initialize list of nodes, including index, distance, parent, and unsolved status
+def initializeNodeInfo(graph):
+    nodeInfo = []
+
+    for i in range(len(graph)):
+        nodeInfo.append((i, 1000, None, False))
+
+    return nodeInfo
+
+#Get the lowest distance node from a queue and return/remove it from the queue
+def highestPriority(queue):
+    min = 1000
+    minVertexIndex = -1
+
+    for v in range(len(queue)):
+        if queue[v][0] < min :
+            min = queue[v][0]
+            minVertexIndex = v
+
+    vertex = queue[minVertexIndex]
+    del queue[minVertexIndex]
+
+    return vertex, minVertexIndex
+
+
