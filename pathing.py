@@ -224,6 +224,20 @@ def get_parents(path, parents, start, node):
     return path
 
 def get_dijkstra_path():
+    target = global_game_data.target_node[global_game_data.current_graph_index]
+    pathToTarget = create_dijkstra_path(0, target)
+ 
+    graph = graph_data.graph_data[global_game_data.current_graph_index]
+    pathFromTargetToEnd = create_dijkstra_path(target, len(graph) - 1)
+
+    pathToTarget.extend(pathFromTargetToEnd)
+    pathToTarget.append(len(graph) - 1)
+
+    print(target, pathToTarget)
+
+    return pathToTarget
+
+def create_dijkstra_path(startNode, target):
 
     # assert preconditions
     assert graph_data.graph_data is not None, "There is no graph data."
@@ -236,10 +250,10 @@ def get_dijkstra_path():
     nodeInfo = initializeNodeInfo(graph)
 
     #set start node distance to zero
-    nodeInfo[0][1] = 0
+    nodeInfo[startNode][1] = 0
 
     queue = []
-    queue.append(nodeInfo[0])
+    queue.append(nodeInfo[startNode])
 
     while len(queue) > 0 :
         vertex = highestPriority(queue)
@@ -256,10 +270,8 @@ def get_dijkstra_path():
                 queue.append(nodeInfo[neighbor])
     
     parents = []
-    
-    target = global_game_data.target_node[global_game_data.current_graph_index]
 
-    parents = getFullPath(graph, target, nodeInfo, parents)
+    parents = getPathToNode(nodeInfo, parents, target, startNode)
 
     return parents
 
@@ -296,12 +308,14 @@ def calculateDistance(v1, v2):
 
     return math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
 
-def getPathToNode(nodeInfo, parents, startIndex, targetIndex):
-    if nodeInfo[startIndex][2] == targetIndex:
-        parents.append(targetIndex)
+def getPathToNode(nodeInfo, parents, targetIndex, startIndex):
+    if targetIndex is None:
+        return
+    elif nodeInfo[targetIndex][2] == startIndex:
+        parents.append(startIndex)
     else:
-        getPathToNode(nodeInfo, parents, nodeInfo[startIndex][2], targetIndex)
-        parents.append(nodeInfo[startIndex][2])
+        getPathToNode(nodeInfo, parents, nodeInfo[targetIndex][2], startIndex)
+        parents.append(nodeInfo[targetIndex][2])
         
 
     return parents

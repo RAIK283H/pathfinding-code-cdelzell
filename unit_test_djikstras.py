@@ -97,6 +97,7 @@ class TestPathFinding(unittest.TestCase):
 
     def test_getFullPath_shortPath(self):
         graph = [1, 2, 3, 4, 5]
+        target = 3
         nodeInfo = [
             [0, 1000, None, False], 
             [1, 1000, 0, False], 
@@ -105,9 +106,34 @@ class TestPathFinding(unittest.TestCase):
             [4, 1000, 2, False] 
         ]
 
-        expected = [0, 2]
+        expected = [0, 3]
         parents = []
-        result = pathing.getPathToNode(nodeInfo, parents, 4, 0)
+        result = pathing.getFullPath(graph, target, nodeInfo, parents)
+
+        self.assertTrue(expected == result, result)
+
+    def test_getFullPath_shortPath(self):
+        graph = [
+        [(0, 0), [1, 2]],
+        [(10, 10), [0, 3]],
+        [(20, 20), [0, 4]],
+        [(30, 30), [1, 5]],
+        [(40, 40), [2, 5]],
+        [(50, 50), [3, 4]]
+        ]
+        target = 3
+        nodeInfo = [
+            [0, 1000, None, False], 
+            [1, 1000, 0, False], 
+            [2, 1000, 0, False],
+            [3, 1000, 1, False],
+            [4, 1000, 2, False],
+            [5, 1000, 3, False], 
+        ]
+
+        expected = [0, 1, 3, 5]
+        parents = []
+        result = pathing.getFullPath(graph, target, nodeInfo, parents)
 
         self.assertTrue(expected == result, result)
 
