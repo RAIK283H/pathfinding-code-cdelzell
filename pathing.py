@@ -292,7 +292,7 @@ def initializeNodeInfo(graph):
     nodeInfo = []
 
     for i in range(len(graph)):
-        nodeInfo.append([i, 1000, None, False])
+        nodeInfo.append([i, 100000, None, False])
 
     return nodeInfo
 
@@ -321,6 +321,7 @@ def calculateDistance(v1, v2):
     return math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
 
 def getPathToNode(nodeInfo, parents, targetIndex, startIndex):
+    print(nodeInfo[targetIndex])
     if nodeInfo[targetIndex][2] == startIndex:
         parents.append(startIndex)
     else:
