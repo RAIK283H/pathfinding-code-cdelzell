@@ -229,16 +229,17 @@ def get_dijkstra_path():
     assert global_game_data.current_graph_index is not None, "There is no graph index chosen."
     assert graph_data.graph_data[global_game_data.current_graph_index] is not None, "There is no graph chosen."
 
+    # get the path from the start node to the target node
     target = global_game_data.target_node[global_game_data.current_graph_index]
     pathToTarget = create_dijkstra_path(0, target)
  
+    # get the path from the target node to the end node 
     graph = graph_data.graph_data[global_game_data.current_graph_index]
     pathFromTargetToEnd = create_dijkstra_path(target, len(graph) - 1)
 
+    # put the paths together
     pathToTarget.extend(pathFromTargetToEnd)
     pathToTarget.append(len(graph) - 1)
-
-    print(target, pathToTarget)
 
     ## test necessary post-conditions
     assert target in pathToTarget, "This path does not contain the necessary target"
@@ -250,6 +251,7 @@ def get_dijkstra_path():
 
     return pathToTarget
 
+# Create a dijkstra-method path from a given source node to a target node
 def create_dijkstra_path(startNode, target):
 
     graph = graph_data.graph_data[global_game_data.current_graph_index]
@@ -259,8 +261,6 @@ def create_dijkstra_path(startNode, target):
 
     #set start node distance to zero
     nodeInfo[startNode][1] = 0
-
-    print(nodeInfo)
 
     queue = []
     queue.append(nodeInfo[startNode])
@@ -272,17 +272,9 @@ def create_dijkstra_path(startNode, target):
 
         neighborNodes = graph[vertex[0]][1]
 
-        for neighbor in neighborNodes:
-            distance = nodeInfo[vertex[0]][1] + calculateDistance(graph[vertex[0]], graph[neighbor])
-            if nodeInfo[neighbor][3] is False and distance < nodeInfo[neighbor][1]:
-                nodeInfo[neighbor][1] = distance
-                nodeInfo[neighbor][2] = vertex[0]
-                queue.append(nodeInfo[neighbor])
+        appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph)
     
     parents = []
-
-    print(nodeInfo)
-    
     parents = getPathToNode(nodeInfo, parents, target, startNode)
 
     return parents
@@ -311,6 +303,18 @@ def highestPriority(queue):
 
     return vertex
 
+# Add neighbor nodes of a vertex to queue and update their distances
+def appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph):
+    for neighbor in neighborNodes:
+            distance = nodeInfo[vertex[0]][1] + calculateDistance(graph[vertex[0]], graph[neighbor])
+            if nodeInfo[neighbor][3] is False and distance < nodeInfo[neighbor][1]:
+                nodeInfo[neighbor][1] = distance
+                nodeInfo[neighbor][2] = vertex[0]
+                queue.append(nodeInfo[neighbor])
+
+    return queue
+
+# Calculate the distance between 2 given nodes using their x and y values
 def calculateDistance(v1, v2):
     x1 = v1[0][0]
     y1 = v1[0][1]
@@ -320,8 +324,8 @@ def calculateDistance(v1, v2):
 
     return math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2))
 
+# Get the path from one node to another using their parent nodes
 def getPathToNode(nodeInfo, parents, targetIndex, startIndex):
-    print(nodeInfo[targetIndex])
     if nodeInfo[targetIndex][2] == startIndex:
         parents.append(startIndex)
     else:
