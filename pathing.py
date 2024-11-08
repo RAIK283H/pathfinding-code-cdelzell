@@ -330,17 +330,3 @@ def getPathToNode(nodeInfo, parents, targetIndex, startIndex):
         
 
     return parents
-
-# if nodeInfo[targetIndex][2] == startIndex:
-#        ~~~~~~~~^^^^^^^^^^^^^
-# TypeError: list indices must be integers or slices, not NoneType
-# This is a common error I am getting, but there should never be a point
-# where you are looking for the parent of the start node, so i am confused
-
-def getFullPath(graph, target, nodeInfo, parents):
-
-    parents = getPathToNode(nodeInfo, parents, target, 0)
-    getPathToNode(nodeInfo, parents, len(graph) - 1, target)
-    parents.append(len(graph) - 1)
-
-    return parents
