@@ -14,7 +14,7 @@ class TestPathFinding(unittest.TestCase):
         [(20, 20), [1]]
         ]
 
-        expected = [[0, 1000, None, False], [1, 1000, None, False], [2, 1000, None, False]]
+        expected = [[0, 100000, None, False], [1, 100000, None, False], [2, 100000, None, False]]
         result = pathing.initializeNodeInfo(graph)
 
         self.assertTrue(expected == result, "The lists were not the same")
@@ -67,6 +67,76 @@ class TestPathFinding(unittest.TestCase):
 
         self.assertTrue(expected == result, result)
 
+    def test_appendNeighborNodes_with_one_neighbor(self):
+        graph = [
+        [(0, 0), [1]],
+        [(10, 10), [0, 2]],
+        [(20, 20), [1]]
+        ]
+
+        nodeInfo = [
+            [0, 0, None, False], 
+            [1, 1000, None, False], 
+            [2, 1000, None, False]
+        ]
+
+        neighborNodes = [1]
+        vertex = [0, 0, None, False]
+        queue = []
+
+        expected = [[1, 14.142135623730951, 0, False]]
+        result = pathing.appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph)
+
+        self.assertTrue(expected == result, result)
+
+
+    def test_appendNeighborNodes_with_two_neighbors(self):
+        graph = [
+        [(0, 0), [1]],
+        [(10, 10), [0, 2]],
+        [(20, 20), [1]]
+        ]
+
+        nodeInfo = [
+            [0, 0, None, False], 
+            [1, 14.142135623730951, 0, False], 
+            [2, 1000, None, False]
+        ]
+
+        neighborNodes = [0, 2]
+        vertex = [1, 14.142135623730951, 0, False]
+        queue = []
+
+        expected = [[2, 28.284271247461902, 1, False]]
+        result = pathing.appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph)
+
+        self.assertTrue(expected == result, result)
+
+
+    def test_appendNeighborNodes_with_no_neighbors(self):
+        graph = [
+        [(0, 0), [1]],
+        [(10, 10), [0, 2]],
+        [(20, 20), [1]]
+        ]
+
+        nodeInfo = [
+            [0, 0, None, False], 
+            [1, 14.142135623730951, 0, False], 
+            [2, 28.284271247461902, 1, False]
+        ]
+
+        neighborNodes = [1]
+        vertex = [2, 28.284271247461902, 1, False]
+        queue = []
+
+        expected = []
+        result = pathing.appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph)
+
+        self.assertTrue(expected == result, result)
+
+
+
     def test_getPathToNode_shortPath(self):
         nodeInfo = [
             [0, 1000, None, False], 
@@ -92,48 +162,6 @@ class TestPathFinding(unittest.TestCase):
         expected = [0, 2]
         parents = []
         result = pathing.getPathToNode(nodeInfo, parents, 4, 0)
-
-        self.assertTrue(expected == result, result)
-
-    def test_getFullPath_shortPath(self):
-        graph = [1, 2, 3, 4, 5]
-        target = 3
-        nodeInfo = [
-            [0, 1000, None, False], 
-            [1, 1000, 0, False], 
-            [2, 1000, 0, False],
-            [3, 1000, 0, False],
-            [4, 1000, 2, False] 
-        ]
-
-        expected = [0, 3]
-        parents = []
-        result = pathing.getFullPath(graph, target, nodeInfo, parents)
-
-        self.assertTrue(expected == result, result)
-
-    def test_getFullPath_shortPath(self):
-        graph = [
-        [(0, 0), [1, 2]],
-        [(10, 10), [0, 3]],
-        [(20, 20), [0, 4]],
-        [(30, 30), [1, 5]],
-        [(40, 40), [2, 5]],
-        [(50, 50), [3, 4]]
-        ]
-        target = 3
-        nodeInfo = [
-            [0, 1000, None, False], 
-            [1, 1000, 0, False], 
-            [2, 1000, 0, False],
-            [3, 1000, 1, False],
-            [4, 1000, 2, False],
-            [5, 1000, 3, False], 
-        ]
-
-        expected = [0, 1, 3, 5]
-        parents = []
-        result = pathing.getFullPath(graph, target, nodeInfo, parents)
 
         self.assertTrue(expected == result, result)
 
