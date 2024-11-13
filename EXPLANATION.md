@@ -7,3 +7,5 @@ This algorithm keeps track of the current node and whether the target has been r
 I added the “Vertices Visited Before Target” statistic. It relies on a method (update\_trips\_to\_target) that counts how many vertices were visited before the target was reached. This could be used in the future to test how efficient each algorithm is in reaching the target the quickest.
 
 ~also included the extra 25 node graph~
+
+~Included A-Start functionality to the Dijkstra function~
