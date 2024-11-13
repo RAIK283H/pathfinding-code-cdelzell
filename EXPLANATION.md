@@ -8,4 +8,4 @@ I added the “Vertices Visited Before Target” statistic. It relies on a metho
 
 ~also included the extra 25 node graph~
 
-~Included A-Start functionality to the Dijkstra function~
+~Included A-Start functionality to the Dijkstra function for extra credit~
