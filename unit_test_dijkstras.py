@@ -3,6 +3,7 @@ import unittest
 import pathing
 import global_game_data
 import permutation
+import graph_data
 
 
 class TestPathFinding(unittest.TestCase):
@@ -85,7 +86,7 @@ class TestPathFinding(unittest.TestCase):
         queue = []
 
         expected = [[1, 14.142135623730951, 0, False]]
-        result = pathing.appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph)
+        result = pathing.appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph, False, 0)
 
         self.assertTrue(expected == result, result)
 
@@ -108,7 +109,7 @@ class TestPathFinding(unittest.TestCase):
         queue = []
 
         expected = [[2, 28.284271247461902, 1, False]]
-        result = pathing.appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph)
+        result = pathing.appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph, False, 0)
 
         self.assertTrue(expected == result, result)
 
@@ -131,7 +132,7 @@ class TestPathFinding(unittest.TestCase):
         queue = []
 
         expected = []
-        result = pathing.appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph)
+        result = pathing.appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph, False, 0)
 
         self.assertTrue(expected == result, result)
 
@@ -164,6 +165,65 @@ class TestPathFinding(unittest.TestCase):
         result = pathing.getPathToNode(nodeInfo, parents, 4, 0)
 
         self.assertTrue(expected == result, result)
+
+    def test_createDijkstraPath_happyPath(self):
+        global_game_data.current_graph_index = 13
+
+        target = 1
+
+        expected = [0]
+        result = pathing.create_dijkstra_path(0, target, False)
+        
+        self.assertTrue(expected == result, result)
+
+    def test_createDijkstraPath_happyPath2(self):
+        global_game_data.current_graph_index = 13
+
+        target = 4
+
+        expected = [0, 1, 2, 3]
+        result = pathing.create_dijkstra_path(0, target, False)
+        
+        self.assertTrue(expected == result, result)
+
+    def test_createDijkstraPath_with_AStar_True(self):
+        global_game_data.current_graph_index = 13
+
+        target = 1
+
+        expected = [0]
+        result = pathing.create_dijkstra_path(0, target, True)
+        
+        self.assertTrue(expected == result, result)
+
+    def test_createDijkstraPath_with_AStar_True(self):
+        global_game_data.current_graph_index = 13
+
+        target = 4
+
+        expected = [0, 1, 2, 3]
+        result = pathing.create_dijkstra_path(0, target, True)
+        
+        self.assertTrue(expected == result, result)
+
+    def test_getDijkstraPath_happyPath(self):
+        global_game_data.current_graph_index = 13
+        global_game_data.target_node = [0,0,0,0,0,0,0,0,0,0,0,0,0,5]
+
+        expected = [0, 1, 2, 3, 5, 7, 8, 9]
+        result = pathing.get_dijkstra_path()
+
+        self.assertTrue(expected == result, result)
+
+    def test_getDijkstraPath_happyPath2(self):
+        global_game_data.current_graph_index = 12
+        global_game_data.target_node = [0,0,0,0,0,0,0,0,0,0,0,0,3]
+
+        expected = [0, 1, 3, 4]
+        result = pathing.get_dijkstra_path()
+
+        self.assertTrue(expected == result, result)
+
 
 if __name__ == '__main__':
     unittest.main()

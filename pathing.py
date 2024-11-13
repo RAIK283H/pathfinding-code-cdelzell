@@ -231,11 +231,11 @@ def get_dijkstra_path():
 
     # get the path from the start node to the target node
     target = global_game_data.target_node[global_game_data.current_graph_index]
-    pathToTarget = create_dijkstra_path(0, target)
+    pathToTarget = create_dijkstra_path(0, target, False)
  
     # get the path from the target node to the end node 
     graph = graph_data.graph_data[global_game_data.current_graph_index]
-    pathFromTargetToEnd = create_dijkstra_path(target, len(graph) - 1)
+    pathFromTargetToEnd = create_dijkstra_path(target, len(graph) - 1, False)
 
     # put the paths together
     pathToTarget.extend(pathFromTargetToEnd)
@@ -252,7 +252,7 @@ def get_dijkstra_path():
     return pathToTarget
 
 # Create a dijkstra-method path from a given source node to a target node
-def create_dijkstra_path(startNode, target):
+def create_dijkstra_path(startNode, target, aStar):
 
     graph = graph_data.graph_data[global_game_data.current_graph_index]
 
@@ -272,7 +272,7 @@ def create_dijkstra_path(startNode, target):
 
         neighborNodes = graph[vertex[0]][1]
 
-        appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph)
+        appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph, aStar, target)
     
     parents = []
     parents = getPathToNode(nodeInfo, parents, target, startNode)
@@ -303,16 +303,20 @@ def highestPriority(queue):
 
     return vertex
 
-# Add neighbor nodes of a vertex to queue and update their distances
-def appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph):
+# Add neighbor nodes of a vertex to queue and update their distances (different distance calulation depending on whether it is A-Star or normal Dijkstra's)
+def appendNeighborNodes(neighborNodes, nodeInfo, queue, vertex, graph, aStar, target):
     for neighbor in neighborNodes:
-            distance = nodeInfo[vertex[0]][1] + calculateDistance(graph[vertex[0]], graph[neighbor])
+            if(aStar):
+                distance = nodeInfo[vertex[0]][1] + calculateDistance(graph[vertex[0]], graph[neighbor]) + calculateDistance(graph[neighbor], graph[target])
+            else:
+                distance = nodeInfo[vertex[0]][1] + calculateDistance(graph[vertex[0]], graph[neighbor])
             if nodeInfo[neighbor][3] is False and distance < nodeInfo[neighbor][1]:
                 nodeInfo[neighbor][1] = distance
                 nodeInfo[neighbor][2] = vertex[0]
                 queue.append(nodeInfo[neighbor])
 
     return queue
+
 
 # Calculate the distance between 2 given nodes using their x and y values
 def calculateDistance(v1, v2):
