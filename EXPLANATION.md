@@ -9,3 +9,5 @@ I added the “Vertices Visited Before Target” statistic. It relies on a metho
 ~also included the extra 25 node graph~
 
 ~Included A-Start functionality to the Dijkstra function for extra credit~
+
+~Changed out the Dijkstras player for the Floyd-Warshall player, edited the algorithm used in the pathing file and changed the name in the config_data file~
